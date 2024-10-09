@@ -1,3 +1,4 @@
+const { type } = require('express/lib/response');
 const mongoose = require('mongoose');
 
 const resturantsSchema = new mongoose.Schema({
@@ -14,8 +15,19 @@ const resturantsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    imageUrl: {
+    imgUrl: {
         type: String,
+        required: true,
+
+    },
+    numberOfTables: {
+        type: Number,
+        required: true,
+
+    },
+    sizeTable: {
+        type: String,
+        required: true,
     },
     openTime: {
         type: Number,
