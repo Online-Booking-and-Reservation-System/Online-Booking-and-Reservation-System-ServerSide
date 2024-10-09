@@ -6,7 +6,6 @@ const cors = require('cors');
 const auth = require('./routes/auth');
 const userRoute = require('./routes/userRouter')
 const httpStatusText = require("./utils/httpStatusText");
-const resturantModel = require('./models/resturantModel');
 const resturantRoute = require('./routes/resturantRouter');
 
 const app = express();
