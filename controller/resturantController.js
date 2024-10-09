@@ -1,5 +1,6 @@
 const Resturat = require('../models/resturantModel');
 
+
 exports.getAllRestaurants = async (req, res) => {
 
     try {
@@ -18,6 +19,7 @@ exports.createRestaurant = async (req, res) => {
         const newResturant = new Resturat(req.body);
         await newResturant.save();
         res.status(201).json({ status: httpStatusText.SUCCESS, data: { resturant: newResturant } });
+
 
     } catch (err) {
         res.status(400).send('Error creating new restaurant');
