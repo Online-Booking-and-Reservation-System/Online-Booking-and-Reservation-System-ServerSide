@@ -7,6 +7,7 @@ const auth = require('./routes/auth');
 const userRoute = require('./routes/userRouter')
 const httpStatusText = require("./utils/httpStatusText");
 const resturantRoute = require('./routes/resturantRouter');
+const path = require('path');
 
 const app = express();
 
@@ -20,6 +21,7 @@ mongoose.connect(url).then(() => {
 })
 app.use(cors())
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // app.use('/api/auth' , auth) ;
 app.use('/api/users', userRoute)
 app.use('/api/resturants', resturantRoute)
