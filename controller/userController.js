@@ -2,9 +2,10 @@ const User = require('../models/userModel') ;
 
 const {validationResult} = require('express-validator')
 const httpStatusText = require("../utils/httpStatusText")
+
 exports.getAllUsers = async(req, res)=>{
    
-    const users = await User.find({} ,{"__v" : false}) ; 
+    const users = await User.find({} ,{"__v" : false , "password ": false}) ; 
     res.json({status : httpStatusText.SUCCESS , data : {users} })
 } ;
 

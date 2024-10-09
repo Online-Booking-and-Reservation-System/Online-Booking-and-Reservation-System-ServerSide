@@ -1,19 +1,20 @@
 const express = require('express') ;
 const userController = require('../controller/userController');
 const { validationSchema } = require('../middlware/validationSchema');
-
+const verifyToken = require('../middlware/verifyToken')
+const allowedTo = require('../middlware/allowedTo')
 const router  = express.Router() ;
 
 
 router.route('/')
-    .get(userController.getAllUsers)
+    .get(verifyToken ,allowedTo('admin' , 'manager'),userController.getAllUsers)
     .post(validationSchema() , userController.addUser)
 
 
 router.route('/:id')
-    .get( userController.getUser)
-    .patch(userController.updateUser )
-    .delete(userController.deleteUser)
+    .get( verifyToken ,allowedTo('admin' , 'manager') , userController.getUser)
+    .patch(verifyToken ,allowedTo('admin' , 'manager') ,userController.updateUser )
+    .delete( verifyToken ,allowedTo('admin' , 'manager') , userController.deleteUser)
 
 
 module.exports = router ;
