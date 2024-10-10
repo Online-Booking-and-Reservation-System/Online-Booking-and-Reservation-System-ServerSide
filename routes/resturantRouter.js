@@ -3,41 +3,41 @@ const express = require('express');
 const router = express.Router();
 
 const multer = require('multer');
-
-const diskStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads');
-    },
-    filename: function (req, file, cb) {
-        const ext = file.mimetype.split('/')[1];
-        const fileName = `Restaurant-${Date.now()}.${ext}`;
-        cb(null, fileName);
-    }
-})
-
-const fileFilter = (req, file, cb) => {
-    const imageType = file.mimetype.split('/')[0];
-
-    if (imageType === 'image') {
-        return cb(null, true)
-    } else {
-        return cb(appError.create('file must be an image', 400), false)
-    }
-}
-
-const upload = multer({
-    storage: diskStorage,
-    fileFilter
-})
-
-
+const path = require('path');
 const resturantController = require('../controller/resturantController');
 
+// Set up multer for image uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Folder where images will be stored
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Set a unique file name
+    }
+});
 
-router.route('/')
-    .get(resturantController.getAllRestaurants)
-    .post(upload.single('imgUrl'), resturantController.createRestaurant)
+// File upload middleware
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png/;
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
 
+        if (extname && mimetype) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only images are allowed!'));
+        }
+    }
+});
+
+
+
+router.get('/', resturantController.getAllRestaurants);
+
+router.post('/', upload.single('imgUrl'), resturantController.createRestaurant);
 router.route('/:id')
     .get(resturantController.getResturant).patch(resturantController.updateResturant).delete(resturantController.deleteResturant);
 
