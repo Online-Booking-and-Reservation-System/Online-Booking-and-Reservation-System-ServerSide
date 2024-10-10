@@ -1,3 +1,4 @@
+const { verify } = require('jsonwebtoken');
 const mongoose  = require('mongoose') ;
 const validator = require('validator')
 const userSchema  = new mongoose.Schema({
@@ -26,7 +27,11 @@ const userSchema  = new mongoose.Schema({
         type :  String  ,
         enum : ['user' , 'admin' ,'manager'] ,
         default : 'user'
-    }
+    } ,
+    verified : {
+        type : Boolean  ,
+        default :  false 
+     }
 
 })
 

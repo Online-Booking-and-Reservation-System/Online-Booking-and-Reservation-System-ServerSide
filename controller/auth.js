@@ -1,7 +1,10 @@
 require('dotenv').config()
 const bcrypt  = require('bcrypt') ;
 const jwt  = require('jsonwebtoken')
+const nodemailer  = require('nodemailer')
+const {v4 : uuidv4} = require('uuid')
 const User = require('../models/userModel')
+const UserVerification  = require('../models/userVerification')
 const httpStatusText = require('../utils/httpStatusText');
 const generateToken = require('../utils/generateToken');
 

@@ -16,8 +16,7 @@ const resturantsSchema = new mongoose.Schema({
         required: true,
     },
     imgUrl: {
-        type: String,
-        required: true,
+        type: String
 
     },
     numberOfTables: {

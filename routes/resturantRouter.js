@@ -34,10 +34,12 @@ const upload = multer({
 const resturantController = require('../controller/resturantController');
 
 
-router.route('/').get(resturantController.getAllRestaurants);
-router.route('/').post(upload.single('imgUrl'), resturantController.createRestaurant);
+router.route('/')
+    .get(resturantController.getAllRestaurants)
+    .post(upload.single('imgUrl'), resturantController.createRestaurant)
 
-router.route('/:id').get(resturantController.getResturant).patch(resturantController.updateResturant).delete(resturantController.deleteResturant);
+router.route('/:id')
+    .get(resturantController.getResturant).patch(resturantController.updateResturant).delete(resturantController.deleteResturant);
 
 
 
