@@ -15,14 +15,18 @@ exports.getAllRestaurants = async (req, res) => {
 };
 
 exports.createRestaurant = async (req, res) => {
+    const { restaurantName, fullAddress, description, numberOfTables, sizeTable, openTime, closeTime } = req.body;
 
     try {
-        const { restaurantName, fullAddress, description, numberOfTables, sizeTable, openTime, closeTime } = req.body;
+
+        const imgUrl = req.file ? req.file.path : null;
 
         const newResturant = new Resturant({
+
             restaurantName,
             fullAddress,
             description,
+            imgUrl,
             numberOfTables,
             sizeTable,
             openTime,
@@ -45,15 +49,7 @@ exports.createRestaurant = async (req, res) => {
     }
 
 
-    // try {
-    //     const newResturant = new Resturat(req.body);
-    //     await newResturant.save();
-    //     res.status(201).json({ status: httpStatusText.SUCCESS, data: { resturant: newResturant } });
 
-
-    // } catch (err) {
-    //     res.status(400).json(err);
-    // }
 };
 
 exports.getResturant = async (req, res) => {
