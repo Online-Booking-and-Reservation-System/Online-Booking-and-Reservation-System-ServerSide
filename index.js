@@ -21,7 +21,7 @@ mongoose.connect(url).then(() => {
 })
 const API_URL = "https://online-booking-and-reservation-system-server-side.vercel.app/api";
 app.use(cors({
-    origin : API_URL ,
+    origin : '*' ,
     methods : ['GET' , 'POST'] ,
     credentials : true 
 }))
