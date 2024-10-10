@@ -19,14 +19,23 @@ mongoose.connect(url).then(() => {
     console.log('mongodb server started');
 
 })
-
-app.use(cors())
+const API_URL = "https://online-booking-and-reservation-system-server-side.vercel.app/api";
+app.use(cors({
+    origin : API_URL ,
+    methods : ['GET' , 'POST'] ,
+    credentials : true 
+}))
 app.use(express.json());
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth' , auth) ;
 app.use('/api/users', userRoute)
 app.use('/api/resturants', resturantRoute)
+
+app.get("/" ,(req, res)=>{
+    res.json({message : "hello world from backend "})
+})
+
 
 app.all('*', (req, res, next) => {
     return res.status(404).json({ status: httpStatusText.ERROR, message: 'this resource is not available' })

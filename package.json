@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js" ,
+    "start": "node index.js", 
+    "build": "echo 'No build step needed'" 
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0",
+    "multer": "^1.4.5-lts.1",
     "validator": "^13.12.0"
   }
 }
