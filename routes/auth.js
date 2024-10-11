@@ -1,7 +1,9 @@
 const express = require('express') ;
 
 const router  = express.Router() ;
-const auth = require('../controller/auth')
+const auth = require('../controller/auth');
+const verifyToken = require('../middlware/verifyToken');
+const authenticateUser = require('../middlware/authenticateUser');
 
 
 router.route('/register')
@@ -10,7 +12,7 @@ router.route('/register')
 router.route('/login')
                 .post(auth.login)
              
-router.route('/verify/:userId/:uniqueString')
-                .get(auth.verifyUser)
+router.route('/verify')
+                .post(authenticateUser,auth.verifyUser)
 module.exports = router ; 
 
