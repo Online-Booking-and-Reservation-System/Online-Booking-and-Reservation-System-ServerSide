@@ -6,7 +6,6 @@ const cors = require('cors');
 const auth = require('./routes/auth');
 const userRoute = require('./routes/userRouter')
 const httpStatusText = require("./utils/httpStatusText");
-const resturantRoute = require('./routes/resturantRouter');
 const path = require('path');
 
 const app = express();
@@ -21,16 +20,21 @@ mongoose.connect(url).then(() => {
 })
 const API_URL = "https://online-booking-and-reservation-system-server-side.vercel.app/api";
 app.use(cors({
-    origin : '*' ,
-    methods : ['GET' , 'POST'] ,
-    credentials : true 
+    origin: '*',
+    methods: ['GET', 'POST'],
+    credentials: true
 }))
 app.use(express.json());
+
+const resturantRoute = require('./routes/resturantRouter');
+
+
+// Serve uploaded images as static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/auth' , auth) ;
-app.use('/users', userRoute)
-app.use('/resturants', resturantRoute)
+app.use('/api/auth' , auth) ;
+app.use('/api/users', userRoute)
+app.use('/api/resturants', resturantRoute)
 
 // app.get("/" ,(req, res)=>{
 //     res.json({message : "hello world from backend "})
