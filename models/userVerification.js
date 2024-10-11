@@ -3,16 +3,17 @@ const mongoose  = require('mongoose') ;
 const validator = require('validator')
 const userVerificationSchema  = new mongoose.Schema({
     userId : {
-        type  : String     
+        type  :mongoose.Schema.Types.ObjectId,
+        ref : 'User',
+        required : true     
     },
-    uniqueString : {
-        type  : String 
-       },
-    createdAt :{
-        type:Date
+    verificationCode : {
+        type  : String ,
+        required : true 
     },
-    expiredAt :{
-        type:Date
+    expiresAt :{
+        type:Date , 
+        required : true 
     } ,
     
 

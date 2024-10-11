@@ -28,13 +28,13 @@ app.use(cors({
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api/auth' , auth) ;
-app.use('/api/users', userRoute)
-app.use('/api/resturants', resturantRoute)
+app.use('/auth' , auth) ;
+app.use('/users', userRoute)
+app.use('/resturants', resturantRoute)
 
-app.get("/" ,(req, res)=>{
-    res.json({message : "hello world from backend "})
-})
+// app.get("/" ,(req, res)=>{
+//     res.json({message : "hello world from backend "})
+// })
 
 
 app.all('*', (req, res, next) => {

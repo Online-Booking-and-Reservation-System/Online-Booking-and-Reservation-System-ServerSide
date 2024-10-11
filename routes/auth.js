@@ -10,6 +10,7 @@ router.route('/register')
 router.route('/login')
                 .post(auth.login)
              
-
+router.route('/verify/:userId/:uniqueString')
+                .get(auth.verifyUser)
 module.exports = router ; 
 
