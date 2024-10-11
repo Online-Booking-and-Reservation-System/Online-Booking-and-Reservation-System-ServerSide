@@ -6,6 +6,9 @@ const User = require('../models/userModel');
 const UserVerification = require('../models/userVerification');
 const httpStatusText = require('../utils/httpStatusText');
 const generateToken = require('../utils/generateToken');
+const Admin = require('../models/adminModel') ;
+const Manager = require('../models/managerModel')
+
 
 // Set up the email transporter
 let transporter = nodemailer.createTransport({
@@ -31,12 +34,26 @@ const register = async (req, res) => {
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
         const hashedCode = await bcrypt.hash(verificationCode, 10);
 
+        //check role 
+        const isAdmin  = await Admin.findOne({email : email })  ;
+        const isManager = await Manager.findOne({email :  email })
+
+        if(isAdmin){
+            role  = 'admin'
+        }else if(isManager){
+            role  = 'manager'
+        }else{
+            role  = 'user'
+        }
+
         const newUser = new User({
             fullName,
             email,
             phoneNumber,
             password: hashedPassword,
+            role : role ,
             verified: false, // Initially, the user is not verified
+
         });
 
         const newUserVerification = new UserVerification({
