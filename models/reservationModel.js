@@ -24,7 +24,7 @@ const reservationsSchema = new mongoose.Schema(
             required: true,
         },
         reservationTime: {
-            type: TimeRanges,
+            type: String,
             required: true,
         },
         resturantName: {
@@ -34,9 +34,11 @@ const reservationsSchema = new mongoose.Schema(
         bookingStatus: {
             type: String,
             required: true,
+            enum: ['Canceled', 'Done', 'Not-Completed'],
+            default: 'Not-Completed',
         },
 
     }
-)
+);
 
 module.exports = mongoose.model('reservation', reservationsSchema);
