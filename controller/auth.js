@@ -6,9 +6,8 @@ const User = require('../models/userModel');
 const UserVerification = require('../models/userVerification');
 const httpStatusText = require('../utils/httpStatusText');
 const generateToken = require('../utils/generateToken');
-const Admin = require('../models/adminModel') ;
-const Manager = require('../models/managerModel')
-
+const Admin = require('../models/adminModel');
+const Manager = require('../models/managerModel');
 
 // Set up the email transporter
 let transporter = nodemailer.createTransport({
@@ -34,38 +33,33 @@ const register = async (req, res) => {
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
         const hashedCode = await bcrypt.hash(verificationCode, 10);
 
-        //check role 
-        const isAdmin  = await Admin.findOne({email : email })  ;
-        const isManager = await Manager.findOne({email :  email })
+        // Check role
+        let role = 'user'; // Default role
+        const isAdmin = await Admin.findOne({ email });
+        const isManager = await Manager.findOne({ email });
 
-        if(isAdmin){
-            role  = 'admin'
-        }else if(isManager){
-            role  = 'manager'
-        }else{
-            role  = 'user'
+        if (isAdmin) {
+            role = 'admin';
+        } else if (isManager) {
+            role = 'manager';
         }
 
-        const newUser = new User({
-            fullName,
-            email,
-            phoneNumber,
-            password: hashedPassword,
-            role : role ,
-            verified: false, // Initially, the user is not verified
-
-        });
-
         const newUserVerification = new UserVerification({
-            userId: newUser._id,
+            tempUserData: {
+                fullName,
+                email,
+                phoneNumber,
+                password: hashedPassword, // Store hashed password
+                role: role,
+            },
+            email: email,
             verificationCode: hashedCode,
             expiresAt: Date.now() + 15 * 60 * 1000, // Set expiration to 15 minutes
         });
 
-        const token = await generateToken({ email: newUser.email, id: newUser._id });
-        newUser.token = token;
+        const token = await generateToken({ email: newUserVerification.email, id: newUserVerification._id });
+        newUserVerification.token = token;
 
-        await newUser.save();
         await newUserVerification.save();
 
         const mailOptions = {
@@ -75,13 +69,14 @@ const register = async (req, res) => {
             html: `<p>Your verification code is <strong>${verificationCode}</strong>. It expires in 15 minutes.</p>`,
         };
 
+        // Improved error handling for email sending
         transporter.sendMail(mailOptions, (error) => {
             if (error) {
                 return res.status(500).json({ status: httpStatusText.ERROR, message: 'Error sending verification email' });
             }
         });
 
-        res.status(201).json({ status: httpStatusText.SUCCESS, message: 'Verification email sent', data: newUser.token });
+        res.status(201).json({ status: httpStatusText.SUCCESS, message: 'Verification email sent', data: newUserVerification.token });
     } catch (error) {
         res.status(400).json({ status: httpStatusText.ERROR, message: error.message });
     }
@@ -91,7 +86,7 @@ const register = async (req, res) => {
 const verifyUser = async (req, res) => {
     try {
         const { verificationCode } = req.body;
-        const userVerification = await UserVerification.findOne({ userId: req.user._id });
+        const userVerification = await UserVerification.findOne({ email: req.user.email }); // Use email to find the record
 
         if (!userVerification) {
             return res.status(400).json({ status: httpStatusText.FAIL, message: 'Verification record not found' });
@@ -99,6 +94,8 @@ const verifyUser = async (req, res) => {
 
         const currentTime = Date.now();
         if (userVerification.expiresAt < currentTime) {
+            await UserVerification.deleteOne({ email: userVerification.email }); // Delete using email
+
             return res.status(400).json({ status: httpStatusText.FAIL, message: 'Verification code has expired' });
         }
 
@@ -107,19 +104,24 @@ const verifyUser = async (req, res) => {
         if (!isCodeValid) {
             return res.status(400).json({ status: httpStatusText.FAIL, message: 'Invalid verification code' });
         }
+
+        const { tempUserData } = userVerification;
+        const newUser = new User({
+            fullName: tempUserData.fullName,
+            email: tempUserData.email,
+            phoneNumber: tempUserData.phoneNumber,
+            password: tempUserData.password,
+            role: tempUserData.role,
+            verified: true, // Set user as verified
+        });
         
-        const user = await User.findById(userVerification.userId);
-        if(userVerification.expiresAt < currentTime && !user.verified){
-            return await user.deleteOne(user._id)
+        const token = await generateToken({ email: newUser.email, id: newUser._id, role: newUser.role });
+        newUser.token = token;
+        await newUser.save();
 
-        }
-        user.verified = true;
-        await user.save();
+        await UserVerification.deleteOne({ email: userVerification.email }); // Delete using email
 
-        await UserVerification.deleteOne({ userId: user._id });
 
-        const token = await generateToken({ email: user.email, id: user._id  , role : user.role});
-        user.token = token
         res.status(200).json({ status: httpStatusText.SUCCESS, message: 'User verified', token });
     } catch (error) {
         res.status(400).json({ status: httpStatusText.ERROR, message: error.message });
@@ -131,6 +133,10 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if(!email && !password ){
+            return res.status(400).json({ status: httpStatusText.FAIL, message: 'email and password required ' });
+
+        }
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ status: httpStatusText.FAIL, message: 'User does not exist' });
@@ -141,9 +147,9 @@ const login = async (req, res) => {
         }
 
         const matchedPassword = await bcrypt.compare(password, user.password);
-        if (matchedPassword) {
-            const token = await generateToken({ email: user.email, id: user._id });
-            return res.status(200).json({ status: httpStatusText.SUCCESS, token });
+        if (user && matchedPassword) {
+            const token = await generateToken({ email: user.email, id: user._id  , role : user.role });
+            return res.status(200).json({ status: httpStatusText.SUCCESS, data : {token} });
         } else {
             return res.status(400).json({ status: httpStatusText.FAIL, message: 'Invalid credentials' });
         }

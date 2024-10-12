@@ -13,6 +13,6 @@ router.route('/login')
                 .post(auth.login)
              
 router.route('/verify')
-                .post(authenticateUser,auth.verifyUser)
+                .post(authenticateUser , auth.verifyUser)
 module.exports = router ; 
 

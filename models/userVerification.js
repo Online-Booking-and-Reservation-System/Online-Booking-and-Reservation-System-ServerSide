@@ -2,10 +2,17 @@ const mongoose = require('mongoose');
 
 const userVerificationSchema = new mongoose.Schema(
     {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',  // Reference to the User model
-            required: true,
+       
+        tempUserData: { 
+            fullName: { type: String, required: true },
+            email: { type: String, required: true },
+            phoneNumber: { type: String, required: true },
+            password: { type: String, required: true },
+            role: { type: String, enum: ['admin', 'manager', 'user'], default: 'user' },
+        },
+        email : {
+            type: String,
+
         },
         verificationCode: {
             type: String,
@@ -15,6 +22,10 @@ const userVerificationSchema = new mongoose.Schema(
             type: Date,
             required: true,
         },
+        token : {
+            type : String ,
+            default : ""
+        }
     },
     {
         timestamps: true,
