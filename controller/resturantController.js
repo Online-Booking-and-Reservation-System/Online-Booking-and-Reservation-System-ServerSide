@@ -15,6 +15,7 @@ exports.getAllRestaurants = async (req, res) => {
 };
 
 exports.createRestaurant = async (req, res) => {
+
     const { restaurantName, fullAddress, description, numberOfTables, sizeTable, openTime, closeTime } = req.body;
 
     try {
@@ -47,9 +48,6 @@ exports.createRestaurant = async (req, res) => {
                 })
 
     }
-
-
-
 };
 
 exports.getResturant = async (req, res) => {
@@ -65,8 +63,6 @@ exports.getResturant = async (req, res) => {
 
     }
 }
-
-
 exports.updateResturant = async (req, res) => {
     const id = req.params.id;
     try {
