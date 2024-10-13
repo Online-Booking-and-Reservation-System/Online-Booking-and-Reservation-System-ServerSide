@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const cors = require('cors');
 
 const auth = require('./routes/auth');
-const userRoute = require('./routes/userRouter')
+const userRoute = require('./routes/userRouter');
+const reservationRoute = require('./routes/reservationRouter');
 const httpStatusText = require("./utils/httpStatusText");
 const path = require('path');
 
@@ -32,9 +33,10 @@ const resturantRoute = require('./routes/resturantRouter');
 // Serve uploaded images as static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api/auth' , auth) ;
-app.use('/api/users', userRoute)
-app.use('/api/resturants', resturantRoute)
+app.use('/api/auth', auth);
+app.use('/api/users', userRoute);
+app.use('/api/resturants', resturantRoute);
+app.use('/api/reservation', reservationRoute);
 
 // app.get("/" ,(req, res)=>{
 //     res.json({message : "hello world from backend "})
