@@ -24,7 +24,7 @@ const reservationsSchema = new mongoose.Schema(
             required: true,
         },
         reservationTime: {
-            type: number,
+            type: String,
             required: true,
         },
         resturantName: {
