@@ -1,6 +1,6 @@
 const reservation = require('../models/reservationModel');
 const httpStatusText = require('../utils/httpStatusText');
-const paypal = require('../paypal');
+const paypal = require('../utils/paypal');
 // Create PayPal Order
 exports.createOrder = async (req, res) => {
     const { reservationId, amount } = req.body;
