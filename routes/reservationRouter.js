@@ -8,7 +8,7 @@ router.get('/', reservationController.getAllReservations);
 
 router.route('/:id').patch(reservationController.updateReservation).delete(reservationController.deleteReservation);
 
-router.get('/resturant/:restaurantName', reservationController.getAllReservationsForRestaurant);
+router.get('/resturant/:resturantName', reservationController.getAllReservationsForRestaurant);
 
 
 
