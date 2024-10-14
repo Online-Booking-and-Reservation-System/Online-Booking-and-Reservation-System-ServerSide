@@ -57,7 +57,7 @@ exports.getAllReservationsForRestaurant = async (req, res) => {
     try {
         const reservations = await reservation.find({ resturantName: resturantName });
 
-        if (!reservations || reservations.length === 0) {
+        if (reservations.length === 0) {
             return res.status(404).json({ message: `No reservations found for restaurant: ${resturantName}` });
         }
 
