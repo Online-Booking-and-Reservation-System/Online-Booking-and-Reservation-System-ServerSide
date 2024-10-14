@@ -1,4 +1,4 @@
-const reservation = require('../models/reservationModel');
+const Reservation = require('../models/reservationModel');
 const httpStatusText = require('../utils/httpStatusText');
 
 exports.createReservation = async (req, res) => {
@@ -69,12 +69,12 @@ exports.getAllReservationsForRestaurant = async (req, res) => {
 
 exports.updateReservation = async (req, res) => {
     try {
-        const reservation = await reservation.findById(req.params.id);
+        const reservation = await Reservation.findById(req.params.id);
         if (!reservation) {
-            return res.status(404).json({ status: httpStatusText.FAIL, message: "Restaurant not found", data: null });
+            return res.status(404).json({ status: httpStatusText.FAIL, message: "Reservation not found", data: null });
         }
 
-        const updatedReservation = await reservation.updateOne({ _id: id }, { $set: { ...req.body } });
+        const updatedReservation = await Reservation.updateOne({ _id: id }, { $set: { ...req.body } });
         res.status(201).json({ status: httpStatusText.SUCCESS, data: { resturant: updatedReservation } });
     } catch (error) {
         return res.status(400).json({ status: httpStatusText.ERROR, message: error.message });
@@ -84,12 +84,14 @@ exports.updateReservation = async (req, res) => {
 
 
 exports.deleteReservation = async (req, res) => {
+
     try {
-        const reservation = await reservation.findById(req.params.id);
+        const reservation = await Reservation.findById(req.params.id);
+
         if (!reservation) {
             return res.status(404).json({ status: httpStatusText.FAIL, message: "Restaurant not found", data: null });
         }
-        await reservation.deleteOne({ _id: req.params.id });
+        await Reservation.deleteOne({ _id: req.params.id });
         res.status(201).json({ status: httpStatusText.SUCCESS, message: "Restaurant deleted successfully", data: null });
     } catch (error) {
         res.status(400).json({ status: httpStatusText.ERROR, message: error.message });
