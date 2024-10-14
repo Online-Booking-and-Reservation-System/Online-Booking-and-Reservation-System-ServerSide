@@ -1,55 +1,10 @@
 const reservation = require('../models/reservationModel');
 const httpStatusText = require('../utils/httpStatusText');
-const paypal = require('../utils/paypal');
-// Create PayPal Order
-exports.createOrder = async (req, res) => {
-    const { reservationId, amount } = req.body;
 
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.prefer("return=representation");
-    request.requestBody({
-        intent: 'CAPTURE',
-        purchase_units: [
-            {
-                amount: {
-                    currency_code: 'USD',
-                    value: amount,
-                },
-                description: `Reservation ID: ${reservationId}`,
-            }
-        ]
-    });
+exports.createReservation = async (req, res) => {
+    const { customerName, phoneNumber, numberOfGusts, numberOfTables, reservationDate, reservationTime, resturantName } = req.body;
 
     try {
-        const order = await paypal.execute(request);
-        res.status(200).json({ id: order.result.id });
-    } catch (error) {
-        res.status(500).json({ message: 'Error creating PayPal order', error });
-    }
-};
-
-// Capture PayPal Order
-exports.captureOrder = async (req, res) => {
-    const { orderID, reservationId } = req.body;
-
-    const request = new paypal.orders.OrdersCaptureRequest(orderID);
-    request.requestBody({});
-
-    try {
-        const capture = await paypal.execute(request);
-
-        // Update reservation status to 'Done' upon successful payment
-        await reservation.findByIdAndUpdate(reservationId, { bookingStatus: 'Done' });
-
-        res.status(200).json({ message: 'Payment captured successfully', capture: capture.result });
-    } catch (error) {
-        res.status(500).json({ message: 'Error capturing PayPal order', error });
-    }
-};
-
-exports.createReservation = async (res, req) => {
-    try {
-        const { customerName, phoneNumber, numberOfGusts, numberOfTables, reservationDate, reservationTime, resturantName } = req.body;
 
         const newReservation = new reservation({
 
@@ -62,14 +17,25 @@ exports.createReservation = async (res, req) => {
             resturantName,
             bookingStatus: 'Not-Completed',
         });
+
+
+
         await newReservation.save();
+
         res.status(201).json({ status: httpStatusText.SUCCESS, data: { Reservation: newReservation } });
-    } catch (err) {
-        return res.status(400).json({
-            status: httpStatusText.ERROR,
-            message: err.message
-        });
+
+    } catch (error) {
+        return res
+            .status(400)
+            .json(
+                {
+                    status: httpStatusText.ERROR,
+                    message: error.message
+                })
+
     }
+
+
 };
 
 exports.getAllReservations = async (req, res) => {
