@@ -1,14 +1,12 @@
 const Reservation = require('../models/reservationModel');
 const httpStatusText = require('../utils/httpStatusText');
-
+const sendBookingConfirmation = require('../utils/emailService');
 exports.createReservation = async (req, res) => {
-    const { customerName, phoneNumber, numberOfGusts, numberOfTables, reservationDate, reservationTime, resturantName } = req.body;
-
+    const { customerName, customerEmail, phoneNumber, numberOfGusts, numberOfTables, reservationDate, reservationTime, resturantName } = req.body;
     try {
-
-        const newReservation = new reservation({
-
+        const newReservation = new Reservation({
             customerName,
+            customerEmail,
             phoneNumber,
             numberOfGusts,
             numberOfTables,
@@ -18,10 +16,8 @@ exports.createReservation = async (req, res) => {
             bookingStatus: 'Not-Completed',
         });
 
-
-
         await newReservation.save();
-
+        await sendBookingConfirmation(newReservation);
         res.status(201).json({ status: httpStatusText.SUCCESS, data: { Reservation: newReservation } });
 
     } catch (error) {
@@ -34,13 +30,11 @@ exports.createReservation = async (req, res) => {
                 })
 
     }
-
-
 };
 
 exports.getAllReservations = async (req, res) => {
     try {
-        const allReservations = await reservation.find();
+        const allReservations = await Reservation.find();
         if (!allReservations || allReservations.length === 0) {
             return res.status(404).json({ status: httpStatusText.FAIL, massage: "No Reservation Found ", data: null });
         }
@@ -55,7 +49,7 @@ exports.getAllReservationsForRestaurant = async (req, res) => {
     const { resturantName } = req.params;
 
     try {
-        const reservations = await reservation.find({ resturantName: resturantName });
+        const reservations = await Reservation.find({ resturantName: resturantName });
 
         if (reservations.length === 0) {
             return res.status(404).json({ message: `No reservations found for restaurant: ${resturantName}` });
