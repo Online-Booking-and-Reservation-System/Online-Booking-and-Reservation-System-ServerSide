@@ -5,6 +5,8 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const resturantController = require('../controller/resturantController');
+const verifyToken = require('../middlware/verifyToken')
+const allowedTo = require('../middlware/allowedTo')
 
 // Set up multer for image uploads
 const storage = multer.diskStorage({
@@ -35,11 +37,13 @@ const upload = multer({
 
 
 
-router.get('/', resturantController.getAllRestaurants);
+router.get('/', verifyToken ,allowedTo('admin' , 'manager')  , resturantController.getAllRestaurants);
 
-router.post('/', upload.single('imgUrl'), resturantController.createRestaurant);
+router.post('/', verifyToken ,allowedTo('admin' , 'manager')  , upload.single('imgUrl'), resturantController.createRestaurant);
 router.route('/:id')
-    .get(resturantController.getResturant).patch(resturantController.updateResturant).delete(resturantController.deleteResturant);
+    .get( verifyToken ,allowedTo('admin' , 'manager')  ,resturantController.getResturant)
+    .patch( verifyToken ,allowedTo('admin' , 'manager')  ,resturantController.updateResturant)
+    .delete( verifyToken ,allowedTo('admin' , 'manager')  ,resturantController.deleteResturant);
 
 
 
