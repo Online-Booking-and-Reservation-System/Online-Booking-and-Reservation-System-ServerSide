@@ -37,11 +37,21 @@ const reservationsSchema = new mongoose.Schema(
         },
         bookingStatus: {
             type: String,
-            required: true,
-            enum: ['Canceled', 'Done', 'Not-Completed'],
-            default: 'Not-Completed',
+            enum: ['Pending', 'Completed', 'Cancelled'],
+            default: 'Pending',
         },
-
+        paymentStatus: {
+            type: String,
+            enum: ['Pending', 'Paid', 'Failed'],
+            default: 'Pending',
+        },
+        paypalTransactionId: {
+            type: String,
+        },
+        amount: {
+            type: Number,
+            required: true,
+        }
     }
 );
 
