@@ -7,14 +7,14 @@ const router  = express.Router() ;
 
 
 router.route('/')
-    .get(verifyToken ,allowedTo('admin' , 'manager'),userController.getAllUsers)
-    .post(validationSchema() , userController.addUser)
+    .get(userController.getAllUsers)
+    .post(verifyToken ,allowedTo('admin' ) , userController.addManager)
 
 
 router.route('/:id')
     .get( verifyToken ,allowedTo('admin' , 'manager') , userController.getUser)
-    .patch(verifyToken ,allowedTo('admin' , 'manager') ,userController.updateUser )
-    .delete( verifyToken ,allowedTo('admin' , 'manager') , userController.deleteUser)
+    .patch(verifyToken ,allowedTo('admin') ,userController.updateUser )
+    .delete( verifyToken ,allowedTo('admin') , userController.deleteUser)
 
 
 module.exports = router ;

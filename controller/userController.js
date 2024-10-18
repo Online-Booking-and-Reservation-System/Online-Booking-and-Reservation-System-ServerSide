@@ -1,5 +1,5 @@
 const User = require('../models/userModel') ;
-
+const Manager = require('../models/managerModel')
 const {validationResult} = require('express-validator')
 const httpStatusText = require("../utils/httpStatusText")
 
@@ -24,7 +24,7 @@ exports.getUser = async (req,res)=>{
 }
 
 
-exports.addUser = async (req,  res)=>{
+exports.addManager = async (req,  res)=>{
 
     const errors  = validationResult(req) ;
     if(!errors.isEmpty()){
@@ -32,9 +32,9 @@ exports.addUser = async (req,  res)=>{
     }
    
     
-    const newUser = new User(req.body)  ;
-    await newUser.save() ;
-    res.status(201).json({status : httpStatusText.SUCCESS , data : {user : newUser}}) ;
+    const newManager = new Manager(req.body)  ;
+    await newManager.save() ;
+    res.status(201).json({status : httpStatusText.SUCCESS , data : {user : newManager}}) ;
     
     
 }

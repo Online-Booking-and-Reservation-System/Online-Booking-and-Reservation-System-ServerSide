@@ -37,7 +37,7 @@ const upload = multer({
 
 
 
-router.get('/', verifyToken ,allowedTo('admin' , 'manager')  , resturantController.getAllRestaurants);
+router.get('/', verifyToken ,allowedTo('user','admin' , 'manager')  , resturantController.getAllRestaurants);
 
 router.post('/', verifyToken ,allowedTo('admin' , 'manager')  , upload.single('imgUrl'), resturantController.createRestaurant);
 router.route('/:id')
