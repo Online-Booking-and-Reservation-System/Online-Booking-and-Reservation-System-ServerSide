@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema(
         token : {
             type : String ,
             default : ""
+        },
+        restaurantName :{
+            type : String ,
+            default : ""
         }
     },
     {

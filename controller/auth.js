@@ -37,12 +37,15 @@ const register = async (req, res) => {
         let role = 'user'; // Default role
         const isAdmin = await Admin.findOne({ email });
         const isManager = await Manager.findOne({ email });
-
+        let restaurantName ;
+        console.log(isManager.restaurantName);
         if (isAdmin) {
             role = 'admin';
         } else if (isManager) {
             role = 'manager';
+            restaurantName  = isManager.restaurantName 
         }
+        
 
         const newUserVerification = new UserVerification({
             tempUserData: {
@@ -51,6 +54,7 @@ const register = async (req, res) => {
                 phoneNumber,
                 password: hashedPassword, // Store hashed password
                 role: role,
+                restaurantName : restaurantName
             },
             email: email,
             verificationCode: hashedCode,
@@ -112,6 +116,7 @@ const verifyUser = async (req, res) => {
             phoneNumber: tempUserData.phoneNumber,
             password: tempUserData.password,
             role: tempUserData.role,
+            restaurantName : tempUserData.restaurantName ,
             verified: true, // Set user as verified
         });
         

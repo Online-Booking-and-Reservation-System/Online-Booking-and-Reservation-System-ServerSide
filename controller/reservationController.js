@@ -3,7 +3,7 @@ const httpStatusText = require('../utils/httpStatusText');
 const sendBookingConfirmation = require('../utils/emailService');
 const paypal = require('@paypal/checkout-server-sdk');
 const paypalClient = require('../utils/paypalConfig');
-
+const User  = require('../models/userModel')
 // Create reservation and initiate PayPal payment
 exports.createReservation = async (req, res) => {
     const { customerName, customerEmail, phoneNumber, numberOfGusts, numberOfTables, reservationDate, reservationTime, resturantName, amount } = req.body;
@@ -118,14 +118,33 @@ exports.getAllReservations = async (req, res) => {
     }
 }
 
+// exports.getAllReservationsForRestaurant = async (req, res) => {
+//     const { resturantName } = req.params;
+
+//     try {
+//         const reservations = await Reservation.find({ resturantName: resturantName });
+
+//         if (reservations.length === 0) {
+//             return res.status(404).json({ message: `No reservations found for restaurant: ${resturantName}` });
+//         }
+
+//         res.status(201).json(reservations);
+//     } catch (err) {
+//         res.status(400).json({ status: httpStatusText.ERROR, message: 'Error retrieving reservations', error: err.massage });
+//     }
+// };
+
+
 exports.getAllReservationsForRestaurant = async (req, res) => {
-    const { resturantName } = req.params;
+    const { email } = req.user;
+    const user = await User.findOne({ email });
+    const restaurantName = user.restaurantName;
 
     try {
-        const reservations = await Reservation.find({ resturantName: resturantName });
+        const reservations = await Reservation.find({ resturantName: restaurantName });
 
         if (reservations.length === 0) {
-            return res.status(404).json({ message: `No reservations found for restaurant: ${resturantName}` });
+            return res.status(404).json({ message: `No reservations found for restaurant: ${restaurantName}` });
         }
 
         res.status(201).json(reservations);

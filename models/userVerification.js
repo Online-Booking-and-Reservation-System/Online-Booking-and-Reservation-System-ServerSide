@@ -9,6 +9,8 @@ const userVerificationSchema = new mongoose.Schema(
             phoneNumber: { type: String, required: true },
             password: { type: String, required: true },
             role: { type: String, enum: ['admin', 'manager', 'user'], default: 'user' },
+            restaurantName: { type: String},
+
         },
         email : {
             type: String,
