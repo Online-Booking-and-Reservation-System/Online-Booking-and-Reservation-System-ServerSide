@@ -37,13 +37,13 @@ const upload = multer({
 
 
 
-router.get('/', verifyToken ,allowedTo('admin' , 'manager')  , resturantController.getAllRestaurants);
+router.get('/', resturantController.getAllRestaurants);
 
-router.post('/', verifyToken ,allowedTo('admin' , 'manager')  , upload.single('imgUrl'), resturantController.createRestaurant);
+router.post('/', verifyToken, allowedTo('admin', 'manager'), upload.single('imgUrl'), resturantController.createRestaurant);
 router.route('/:id')
-    .get( verifyToken ,allowedTo('admin' , 'manager')  ,resturantController.getResturant)
-    .patch( verifyToken ,allowedTo('admin' , 'manager')  ,resturantController.updateResturant)
-    .delete( verifyToken ,allowedTo('admin' , 'manager')  ,resturantController.deleteResturant);
+    .get(verifyToken, allowedTo('admin', 'manager'), resturantController.getResturant)
+    .patch(verifyToken, allowedTo('admin', 'manager'), resturantController.updateResturant)
+    .delete(verifyToken, allowedTo('admin', 'manager'), resturantController.deleteResturant);
 
 
 
