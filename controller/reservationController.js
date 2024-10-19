@@ -118,21 +118,21 @@ exports.getAllReservations = async (req, res) => {
     }
 }
 
-// exports.getAllReservationsForRestaurant = async (req, res) => {
-//     const { resturantName } = req.params;
+exports.getAllReservationsByCustomerName  = async (req, res) => {
+    const { customerName } = req.params;
 
-//     try {
-//         const reservations = await Reservation.find({ resturantName: resturantName });
+    try {
+        const reservations = await Reservation.find({ customerName : customerName });
 
-//         if (reservations.length === 0) {
-//             return res.status(404).json({ message: `No reservations found for restaurant: ${resturantName}` });
-//         }
+        if (reservations.length === 0) {
+            return res.status(404).json({ message: `No reservations found for this cusromer : ${customerName}` });
+        }
 
-//         res.status(201).json(reservations);
-//     } catch (err) {
-//         res.status(400).json({ status: httpStatusText.ERROR, message: 'Error retrieving reservations', error: err.massage });
-//     }
-// };
+        res.status(201).json(reservations);
+    } catch (err) {
+        res.status(400).json({ status: httpStatusText.ERROR, message: 'Error retrieving reservations', error: err.massage });
+    }
+};
 
 
 exports.getAllReservationsForRestaurant = async (req, res) => {

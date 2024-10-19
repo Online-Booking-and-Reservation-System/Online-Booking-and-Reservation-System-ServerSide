@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const { trim } = require('validator');
 
 const reservationsSchema = new mongoose.Schema(
     {
         customerName: {
             type: String,
             required: true,
+            trim : true  ,
         },
         customerEmail: {
             type: String,

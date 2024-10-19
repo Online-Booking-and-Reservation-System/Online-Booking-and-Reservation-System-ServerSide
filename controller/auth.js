@@ -154,6 +154,8 @@ const login = async (req, res) => {
         const matchedPassword = await bcrypt.compare(password, user.password);
         if (user && matchedPassword) {
             const token = await generateToken({ email: user.email, id: user._id  , role : user.role });
+            console.log(user.role );
+            
             return res.status(200).json({ status: httpStatusText.SUCCESS, data : {token} });
         } else {
             return res.status(400).json({ status: httpStatusText.FAIL, message: 'Invalid credentials' });

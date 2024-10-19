@@ -5,7 +5,7 @@ const verifyToken = require('../middlware/verifyToken')
 const allowedTo = require('../middlware/allowedTo')
 const authenticateUser = require('../middlware/authenticateUser');
 
-router.post('/', verifyToken ,allowedTo('admin' , 'manager')  , reservationController.createReservation);
+router.post('/', verifyToken ,allowedTo('user' ,'admin' , 'manager')  , reservationController.createReservation);
 // Capture PayPal payment after approval
 router.post('/capture-payment', verifyToken ,allowedTo('admin' , 'manager')  , reservationController.capturePayment);
 
@@ -15,11 +15,15 @@ router.get('/payment-cancel', verifyToken ,allowedTo('admin' , 'manager')  , res
 
 router.get('/', verifyToken ,allowedTo('admin' , 'manager')  , reservationController.getAllReservations);
 
+router.get('/resturant',authenticateUser, reservationController.getAllReservationsForRestaurant);
+
+router.get('/:customerName' , verifyToken ,allowedTo('manager')  , reservationController.getAllReservationsByCustomerName)
+
 router.route('/:id')
 .patch( verifyToken ,allowedTo('admin' , 'manager')  ,reservationController.updateReservation)
 .delete(verifyToken ,allowedTo('admin' , 'manager')  ,reservationController.deleteReservation);
 
-router.get('/resturant',authenticateUser, reservationController.getAllReservationsForRestaurant);
+
 
 
 
