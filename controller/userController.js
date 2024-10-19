@@ -39,6 +39,11 @@ exports.addManager = async (req,  res)=>{
     
 }
 
+exports.deleteManager = async  (req, res)=>{
+    const deletedManager  = await Manager.deleteOne({_id : req.params.id})
+    res.status(200).json({status : httpStatusText.SUCCESS , data :null }) ;
+}
+
 exports.updateUser = async (req, res)=>{
     const id  = req.params.id
     try {

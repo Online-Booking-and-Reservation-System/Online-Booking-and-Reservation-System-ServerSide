@@ -16,5 +16,7 @@ router.route('/:id')
     .patch(verifyToken ,allowedTo('admin') ,userController.updateUser )
     .delete( verifyToken ,allowedTo('admin') , userController.deleteUser)
 
+router.route('/deleteManager/:id')
+      .delete( verifyToken ,allowedTo('admin') , userController.deleteManager)  
 
 module.exports = router ;
