@@ -5,23 +5,23 @@ const verifyToken = require('../middlware/verifyToken')
 const allowedTo = require('../middlware/allowedTo')
 const authenticateUser = require('../middlware/authenticateUser');
 
-router.post('/', verifyToken ,allowedTo('user' ,'admin' , 'manager')  , reservationController.createReservation);
+router.post('/', verifyToken, allowedTo('user', 'admin', 'manager'), reservationController.createReservation);
 // Capture PayPal payment after approval
-router.post('/capture-payment', verifyToken ,allowedTo('admin' , 'manager')  , reservationController.capturePayment);
+router.post('/capture-payment', verifyToken, allowedTo('user', 'admin', 'manager'), reservationController.capturePayment);
 
 // Handle payment cancellation
-router.get('/payment-cancel', verifyToken ,allowedTo('admin' , 'manager')  , reservationController.paymentCancel);
+router.get('/payment-cancel', verifyToken, allowedTo('user', 'admin', 'manager'), reservationController.paymentCancel);
 
 
-router.get('/', verifyToken ,allowedTo('admin' , 'manager')  , reservationController.getAllReservations);
+router.get('/', verifyToken, allowedTo('admin', 'manager'), reservationController.getAllReservations);
 
-router.get('/resturant',authenticateUser, reservationController.getAllReservationsForRestaurant);
+router.get('/resturant/:restaurantName', authenticateUser, reservationController.getAllReservationsForRestaurant);
 
-router.get('/:customerName' , verifyToken ,allowedTo('manager')  , reservationController.getAllReservationsByCustomerName)
+router.get('/:customerName', verifyToken, allowedTo('manager'), reservationController.getAllReservationsByCustomerName)
 
 router.route('/:id')
-.patch( verifyToken ,allowedTo('admin' , 'manager')  ,reservationController.updateReservation)
-.delete(verifyToken ,allowedTo('admin' , 'manager')  ,reservationController.deleteReservation);
+    .patch(verifyToken, allowedTo('admin', 'manager'), reservationController.updateReservation)
+    .delete(verifyToken, allowedTo('admin', 'manager'), reservationController.deleteReservation);
 
 
 
