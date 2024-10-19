@@ -44,6 +44,12 @@ exports.deleteManager = async  (req, res)=>{
     res.status(200).json({status : httpStatusText.SUCCESS , data :null }) ;
 }
 
+exports.getAllManagers = async(req, res)=>{
+   
+    const managers = await Manager.find({} ,{"__v" : false , "password ": false}) ; 
+    res.json({status : httpStatusText.SUCCESS , data : {managers} })
+} ;
+
 exports.updateUser = async (req, res)=>{
     const id  = req.params.id
     try {

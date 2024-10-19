@@ -18,5 +18,6 @@ router.route('/:id')
 
 router.route('/deleteManager/:id')
       .delete( verifyToken ,allowedTo('admin') , userController.deleteManager)  
-
+router.route('/manager')
+      .get(userController.getAllManagers)
 module.exports = router ;
