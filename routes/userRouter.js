@@ -11,9 +11,9 @@ router.route('/')
     
 
 router.route('/:id')
-    .get( verifyToken ,allowedTo('admin' , 'manager') , userController.getUser)
-    .patch(verifyToken ,allowedTo('admin') ,userController.updateUser )
-    .delete( verifyToken ,allowedTo('admin') , userController.deleteUser)
+    .get( verifyToken ,allowedTo('user','admin' , 'manager') , userController.getUser)
+    .patch(verifyToken ,allowedTo('user','manager','admin') ,userController.updateUser )
+    .delete( verifyToken ,allowedTo('user','manager','admin') , userController.deleteUser)
 
 
 
