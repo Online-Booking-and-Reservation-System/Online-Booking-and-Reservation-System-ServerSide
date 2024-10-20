@@ -8,16 +8,13 @@ const router  = express.Router() ;
 
 router.route('/')
     .get(userController.getAllUsers)
-    .post(verifyToken ,allowedTo('admin' ) , userController.addManager)
-
+    
 
 router.route('/:id')
     .get( verifyToken ,allowedTo('admin' , 'manager') , userController.getUser)
     .patch(verifyToken ,allowedTo('admin') ,userController.updateUser )
     .delete( verifyToken ,allowedTo('admin') , userController.deleteUser)
 
-router.route('/deleteManager/:id')
-      .delete( verifyToken ,allowedTo('admin') , userController.deleteManager)  
-router.route('/manager')
-      .get(userController.getAllManagers)
+
+
 module.exports = router ;

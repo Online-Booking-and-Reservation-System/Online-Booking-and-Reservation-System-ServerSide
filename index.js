@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const auth = require('./routes/auth');
 const userRoute = require('./routes/userRouter');
+const managerRoute = require('./routes/managerRouter');
 const reservationRoute = require('./routes/reservationRouter');
 const httpStatusText = require("./utils/httpStatusText");
 const path = require('path');
@@ -35,6 +36,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', auth);
 app.use('/api/users', userRoute);
+app.use('/api/managers', managerRoute);
+
 app.use('/api/resturants', resturantRoute);
 app.use('/api/reservation', reservationRoute);
 

@@ -24,32 +24,6 @@ exports.getUser = async (req,res)=>{
 }
 
 
-exports.addManager = async (req,  res)=>{
-
-    const errors  = validationResult(req) ;
-    if(!errors.isEmpty()){
-        return res.status(400).json({status : httpStatusText.FAIL , data : {errors : errors.array()}})
-    }
-   
-    
-    const newManager = new Manager(req.body)  ;
-    await newManager.save() ;
-    res.status(201).json({status : httpStatusText.SUCCESS , data : {user : newManager}}) ;
-    
-    
-}
-
-exports.deleteManager = async  (req, res)=>{
-    const deletedManager  = await Manager.deleteOne({_id : req.params.id})
-    res.status(200).json({status : httpStatusText.SUCCESS , data :null }) ;
-}
-
-exports.getAllManagers = async(req, res)=>{
-   
-    const managers = await Manager.find({} ,{"__v" : false , "password ": false}) ; 
-    res.json({status : httpStatusText.SUCCESS , data : {managers} })
-} ;
-
 exports.updateUser = async (req, res)=>{
     const id  = req.params.id
     try {
