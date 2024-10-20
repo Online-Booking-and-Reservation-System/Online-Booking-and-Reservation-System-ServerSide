@@ -16,7 +16,7 @@ router.get('/', verifyToken, allowedTo('manager','admin'), reservationController
 
 router.get('/reservation/resturant', authenticateUser, reservationController.getAllReservationsForRestaurant);
 
-router.get('/:customerName', verifyToken, allowedTo('user' ,'manager'), reservationController.getAllReservationsByCustomerName)
+router.get('/customer',  authenticateUser, reservationController.getAllReservationsForCustomer)
 
 router.route('/:id')
     .patch(verifyToken, allowedTo('admin', 'manager'), reservationController.updateReservation)

@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-const userVerification = require('../models/userVerification');
 require('dotenv').config();
 
 const authenticateUser = async (req, res, next) => {
@@ -15,7 +14,7 @@ const authenticateUser = async (req, res, next) => {
             return res.status(401).json({ status: 'fail', message: 'Invalid token' });
         }
         
-        const user = await userVerification.findOne({email : decoded.email});
+        const user = await User.findOne({email : decoded.email});
         
         if (!user) {
             return res.status(404).json({ status: 'fail', message: 'User not found' });

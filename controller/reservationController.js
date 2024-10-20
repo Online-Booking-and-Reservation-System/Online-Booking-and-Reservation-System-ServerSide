@@ -118,11 +118,11 @@ exports.getAllReservations = async (req, res) => {
     }
 }
 
-exports.getAllReservationsByCustomerName  = async (req, res) => {
-    const { customerName } = req.params;
-
+exports.getAllReservationsForCustomer = async (req, res) => {
     try {
-        const reservations = await Reservation.find({ customerName : customerName });
+        const { email } = req.user;
+        
+        const reservations = await Reservation.find({ customerEmail : email });
 
         if (reservations.length === 0) {
             return res.status(404).json({ message: `No reservations found for this cusromer : ${customerName}` });
