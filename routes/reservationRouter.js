@@ -12,12 +12,11 @@ router.post('/capture-payment', verifyToken, allowedTo('user', 'admin', 'manager
 // Handle payment cancellation
 router.get('/payment-cancel', verifyToken, allowedTo('user', 'admin', 'manager'), reservationController.paymentCancel);
 
+router.get('/', verifyToken, allowedTo('manager','admin'), reservationController.getAllReservations);
 
-router.get('/', verifyToken, allowedTo('admin', 'manager'), reservationController.getAllReservations);
+router.get('/reservation/resturant', authenticateUser, reservationController.getAllReservationsForRestaurant);
 
-router.get('/resturant/:restaurantName', authenticateUser, reservationController.getAllReservationsForRestaurant);
-
-router.get('/:customerName', verifyToken, allowedTo('manager'), reservationController.getAllReservationsByCustomerName)
+router.get('/:customerName', verifyToken, allowedTo('user' ,'manager'), reservationController.getAllReservationsByCustomerName)
 
 router.route('/:id')
     .patch(verifyToken, allowedTo('admin', 'manager'), reservationController.updateReservation)

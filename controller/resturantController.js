@@ -16,12 +16,13 @@ exports.getAllRestaurants = async (req, res) => {
 
 exports.createRestaurant = async (req, res) => {
 
-    const { restaurantName, fullAddress, description, numberOfTables, sizeTable, openTime, closeTime } = req.body;
-
+    
     try {
-
+        
+        const { restaurantName, fullAddress, description, numberOfTables, sizeTable, openTime, closeTime } = req.body;
         const imgUrl = req.file ? req.file.path : null;
-
+        console.log(imgUrl);
+        
         const newResturant = new Resturant({
 
             restaurantName,
