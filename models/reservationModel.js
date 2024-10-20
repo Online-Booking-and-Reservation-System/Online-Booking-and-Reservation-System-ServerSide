@@ -6,7 +6,7 @@ const reservationsSchema = new mongoose.Schema(
         customerName: {
             type: String,
             required: true,
-            trim : true  ,
+            trim: true,
         },
         customerEmail: {
             type: String,
@@ -52,7 +52,7 @@ const reservationsSchema = new mongoose.Schema(
         },
         amount: {
             type: Number,
-            required: true,
+            // required: true,
         }
     }
 );
