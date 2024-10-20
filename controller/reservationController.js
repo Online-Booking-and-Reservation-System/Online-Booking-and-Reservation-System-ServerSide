@@ -8,7 +8,7 @@ const User  = require('../models/userModel')
 exports.createReservation = async (req, res) => {
     const { customerName, customerEmail, phoneNumber, numberOfGusts, numberOfTables, reservationDate, reservationTime, resturantName, amount } = req.body;
     try {
-
+        
         // Create a new reservation with "Pending" status
         const newReservation = new Reservation({
             customerName,
@@ -50,6 +50,7 @@ exports.createReservation = async (req, res) => {
             reservation: newReservation,
             paypalOrderId: order.result.id
         });
+        await sendBookingConfirmation(newReservation);
 
     } catch (error) {
         console.error('Error creating reservation:', error);
@@ -61,7 +62,6 @@ exports.createReservation = async (req, res) => {
 
     }
 
-    await sendBookingConfirmation(newReservation);
 
 };
 
