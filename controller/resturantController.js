@@ -1,28 +1,15 @@
 const Resturant = require('../models/resturantModel');
 const httpStatusText = require('../utils/httpStatusText')
 
-exports.getAllRestaurants = async (req, res) => {
-
-    try {
-        const resturants = await Resturant.find();
-        if (!resturants || resturants.length === 0) {
-            return res.status(404).json({ status: httpStatusText.FAIL, message: "No restaurants found", data: null });
-        }
-        res.json({ status: httpStatusText.SUCCESS, data: { resturants } });
-    } catch (error) {
-        res.status(400).json({ status: httpStatusText.ERROR, message: "An error occurred", error: error.message });
-    }
-};
-
 exports.createRestaurant = async (req, res) => {
 
-    
+
     try {
-        
+
         const { restaurantName, fullAddress, description, numberOfTables, sizeTable, openTime, closeTime } = req.body;
-        const imgUrl = req.file ? req.file.path : null;
+        const imgUrl = req.file ? req.file.filename : null;
         console.log(imgUrl);
-        
+
         const newResturant = new Resturant({
 
             restaurantName,
@@ -48,6 +35,24 @@ exports.createRestaurant = async (req, res) => {
                     message: error.message
                 })
 
+    }
+};
+exports.getAllRestaurants = async (req, res) => {
+
+    try {
+        const resturants = await Resturant.find();
+
+        // Append the full URL for the image path so the frontend can access it
+        const updatedRestaurants = resturants.map(restaurant => ({
+            ...restaurant._doc,
+            imgUrl: restaurant.imgUrl ? `${req.protocol}://${req.get('host')}/${restaurant.imgUrl}` : null
+        }));
+        if (!resturants || resturants.length === 0) {
+            return res.status(404).json({ status: httpStatusText.FAIL, message: "No restaurants found", data: null });
+        }
+        res.json({ status: httpStatusText.SUCCESS, data: { updatedRestaurants } });
+    } catch (error) {
+        res.status(400).json({ status: httpStatusText.ERROR, message: "An error occurred", error: error.message });
     }
 };
 
