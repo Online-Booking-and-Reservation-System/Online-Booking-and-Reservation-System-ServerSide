@@ -23,7 +23,7 @@ mongoose.connect(url).then(() => {
 const API_URL = "https://online-booking-and-reservation-system-server-side.vercel.app/api";
 app.use(cors({
     origin: '*',
-    methods: ['GET', 'POST' ,'PUT' , 'PATCH' , 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true
 }))
 app.use(express.json());
@@ -32,8 +32,7 @@ const resturantRoute = require('./routes/resturantRouter');
 
 
 // Serve uploaded images as static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/uploads', express.static('uploads'));
 app.use('/api/auth', auth);
 app.use('/api/users', userRoute);
 app.use('/api/managers', managerRoute);
