@@ -37,7 +37,6 @@ const upload = multer({
 
 
 
-
 //router.get('/', verifyToken ,allowedTo('user','admin' , 'manager')  , resturantController.getAllRestaurants);
 router.get('/', resturantController.getAllRestaurants);
 
