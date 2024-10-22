@@ -40,8 +40,7 @@ const userSchema = new mongoose.Schema(
             default : ""
         },
         restaurantName :{
-            type : String ,
-            default : ""
+            type : String 
         }
     },
     {

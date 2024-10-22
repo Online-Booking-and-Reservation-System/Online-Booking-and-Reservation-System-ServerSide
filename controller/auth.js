@@ -38,7 +38,6 @@ const register = async (req, res) => {
         const isAdmin = await Admin.findOne({ email });
         const isManager = await Manager.findOne({ email });
         let restaurantName ;
-        console.log(isManager.restaurantName);
         if (isAdmin) {
             role = 'admin';
         } else if (isManager) {
